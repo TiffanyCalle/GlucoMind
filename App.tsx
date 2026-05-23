@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // HealthKit — uses real native module on device, mock in simulator
 import { HK, HKPermissions, HealthKitPermissions, HealthUnit, HealthValue } from './src/healthkit';
+import AnalyticsScreen from './src/AnalyticsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -129,15 +130,6 @@ function HomeScreen() {
   );
 }
 
-// --- 2. THE ANALYTICS SCREEN (Placeholder) ---
-function AnalyticsScreen() {
-  return (
-    <View style={styles.centerContainer}>
-      <Text style={styles.titleText}>Analytics</Text>
-      <Text style={styles.subtitleText}>7-Day Trend Coming Soon...</Text>
-    </View>
-  );
-}
 
 // --- 3. THE COACH SCREEN (Placeholder) ---
 function CoachScreen() {
@@ -176,12 +168,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F0F4F8',
     alignItems: 'center',
-  },
-  centerContainer: {
-    flex: 1,
-    backgroundColor: '#F0F4F8',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   titleText: {
     fontSize: 40,

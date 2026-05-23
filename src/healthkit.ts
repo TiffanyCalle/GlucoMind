@@ -11,22 +11,18 @@ export const HealthUnit = {
 // Mock store — used automatically when the native HealthKit module
 // isn't wired up (simulator, unit tests, etc.)
 // ------------------------------------------------------------------
+function daysAgo(n: number): string {
+  return new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString();
+}
+
 const mockStore: HealthValue[] = [
-  {
-    value: 124,
-    startDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate:   new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    value: 108,
-    startDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate:   new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    value: 143,
-    startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate:   new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
+  { value: 124, startDate: daysAgo(0), endDate: daysAgo(0) },
+  { value: 108, startDate: daysAgo(1), endDate: daysAgo(1) },
+  { value: 143, startDate: daysAgo(2), endDate: daysAgo(2) },
+  { value:  97, startDate: daysAgo(3), endDate: daysAgo(3) },
+  { value: 162, startDate: daysAgo(4), endDate: daysAgo(4) },
+  { value: 118, startDate: daysAgo(5), endDate: daysAgo(5) },
+  { value: 131, startDate: daysAgo(6), endDate: daysAgo(6) },
 ];
 
 const mock = {
