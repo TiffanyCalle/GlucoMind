@@ -1,3 +1,5 @@
+ENV['PATH'] = "#{ENV['HOME']}/.nvm/versions/node/v20.20.2/bin:#{ENV['PATH']}"
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -23,6 +25,9 @@ target 'GlucoMind' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'RNAppleHealthKit', :path => '../node_modules/react-native-health'
+
+
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -30,5 +35,27 @@ target 'GlucoMind' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 blocks sourcing scripts via paths containing ".." traversal.
+    # Override REACT_NATIVE_PATH to a resolved absolute path for all targets.
+    rn_abs_path = File.realpath("#{Pod::Config.instance.installation_root}/../node_modules/react-native")
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |build_config|
+        build_config.build_settings['REACT_NATIVE_PATH'] = rn_abs_path
+      end
+    end
+    installer.pods_project.save
+
+    # Patch with-environment.sh: replace $PODS_ROOT/../ with cd+pwd expansion so
+    # Xcode 26's block on sourcing ".." paths does not abort hermes script phases.
+    with_env = "#{rn_abs_path}/scripts/xcode/with-environment.sh"
+    if File.exist?(with_env)
+      content = File.read(with_env)
+      patched = content.gsub(
+        'ENV_PATH="$PODS_ROOT/../.xcode.env"',
+        'ENV_PATH="$(cd "$PODS_ROOT/.." && pwd)/.xcode.env"'
+      )
+      File.write(with_env, patched) if patched != content
+    end
   end
 end

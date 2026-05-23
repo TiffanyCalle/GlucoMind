@@ -33,6 +33,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>GlucoMind needs to read your blood sugar to provide AI coaching.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>GlucoMind needs to save your glucose readings to Apple Health.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>RCTNewArchEnabled</key>
