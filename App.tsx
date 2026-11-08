@@ -28,6 +28,8 @@ function HomeScreen() {
   const [isHKReady, setIsHKReady] = useState(false);
   const [recentReadings, setRecentReadings] = useState<HealthValue[]>([]);
 
+  /** Go ask Apple Health for all blood glucose readings from the last 7 days,
+  get me the 10 most recent ones, and if it works — show them on screen. */
   function fetchReadings() {
     HK.getBloodGlucoseSamples(
       {
@@ -47,6 +49,10 @@ function HomeScreen() {
     );
   }
 
+
+  /* When this screen first opens, connect to Apple Health.
+  If it fails, show an error.
+  If it works, mark it as ready and load the recent readings. */
   useEffect(() => {
     HK.initHealthKit(HK_PERMISSIONS, (err: string) => {
       if (err) {
@@ -76,15 +82,15 @@ function HomeScreen() {
         unit: HealthUnit.mgPerdL,
         startDate: new Date().toISOString(),
       },
-      (err) => {
+      (err) => { //this is a CALLBACK = code that runs after Apple Health finishes trying to save
         if (err) {
-          console.log('Error saving glucose sample:', err);
-          Alert.alert('Error', 'Could not save reading to Apple Health.');
+          console.log('Error saving glucose sample:', err); //prints to console for debugging
+          Alert.alert('Error', 'Could not save reading to Apple Health.'); //for user
           return;
         }
         Alert.alert('Saved!', `${value} mg/dL logged to Apple Health.`);
-        setGlucose('');
-        fetchReadings();
+        setGlucose(''); // clears the text input box back to empty after saving , so the user can type a new reading next time.
+        fetchReadings(); //refreshes reading immediately so new rewading shows rigth away
       },
     );
   }
@@ -131,7 +137,7 @@ function HomeScreen() {
 }
 
 
-// --- 3. THE COACH SCREEN (Placeholder) ---
+// --- 2. THE COACH SCREEN (Placeholder) ---
 function CoachScreen() {
   return (
     <View style={styles.centerContainer}>
@@ -146,6 +152,8 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" />
+      {/* NavigationContainer is required by React Navigation — it's the engine
+          behind the tab bar. From the @react-navigation/native library. */}
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={{
@@ -164,6 +172,12 @@ function App() {
 
 // --- STYLES ---
 const styles = StyleSheet.create({
+  centerContainer: {
+    flex: 1,
+    backgroundColor: '#F0F4F8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F0F4F8',

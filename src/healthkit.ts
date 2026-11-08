@@ -35,7 +35,13 @@ const mock = {
   },
 
   getBloodGlucoseSamples(
-    options: { startDate?: string; endDate?: string; ascending?: boolean; limit?: number },
+    options: {
+      unit?: string;
+      startDate?: string;
+      endDate?: string;
+      ascending?: boolean;
+      limit?: number;
+    },
     callback: (err: string, results: HealthValue[]) => void,
   ) {
     let results = [...mockStore];
@@ -54,7 +60,7 @@ const mock = {
   },
 
   saveBloodGlucoseSample(
-    options: { value: number; startDate?: string },
+    options: { value: number; unit?: string; startDate?: string },
     callback: (err: string, result: HealthValue) => void,
   ) {
     const now = options.startDate ?? new Date().toISOString();
@@ -77,5 +83,5 @@ export const HK = nativeAvailable
     }
   : mock;
 
-export { HealthKitPermissions, HealthValue };
+export type { HealthKitPermissions, HealthValue };
 export const HKPermissions = AppleHealthKit.Constants.Permissions;
